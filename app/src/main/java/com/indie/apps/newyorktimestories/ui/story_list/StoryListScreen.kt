@@ -36,7 +36,7 @@ fun StoryListScreen() {
     Scaffold(
         topBar = {
             StoryListTopBar(
-                onTextChange = {},
+                onTextChange = viewModel::searchData,
                 options = filterList,
                 onFilterSelect = viewModel::setSection,
                 selectedFilterText =currentFilterText

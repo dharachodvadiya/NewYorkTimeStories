@@ -18,8 +18,12 @@ interface  ArticleDao {
     fun insertAll(articles : List<Article>) : List<Long>
 
     @Transaction
+    @Query("SELECT * FROM articles WHERE section = :section")
+    suspend fun getRecordsFromSection(section: String): List<Article>
+
+    @Transaction
     @Query("SELECT * FROM articles WHERE section = :section AND (title LIKE  '%' || :searchQuery || '%' OR kicker LIKE  '%' || :searchQuery || '%')")
-    suspend fun getOrSearchRecordsFromSection(searchQuery: String, section: String): List<Article>
+    suspend fun searchRecordsFromSection(searchQuery: String, section: String): List<Article>
 
 /*
 

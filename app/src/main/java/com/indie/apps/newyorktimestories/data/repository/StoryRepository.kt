@@ -9,5 +9,7 @@ import retrofit2.Response
 interface StoryRepository {
     suspend fun getTopStories(section: String): Response<ApiResponse>
 
-    suspend fun getOrSearchRecordsFromSection(search:String,section: String): Flow<Resource<List<Article>>>
+    suspend fun searchRecordsFromSection(search:String,section: String): Flow<Resource<List<Article>>>
+
+    suspend fun getRecordsFromSection(section: String): Flow<Resource<List<Article>>>
 }

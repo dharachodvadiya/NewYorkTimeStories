@@ -147,6 +147,7 @@ fun StoryListTopBar(
                         text = { Text(text = item) },
                         onClick = {
                             //selectedFilterText = item
+                            textState = ""
                             expanded = false
                             onFilterSelect(item)
                         }

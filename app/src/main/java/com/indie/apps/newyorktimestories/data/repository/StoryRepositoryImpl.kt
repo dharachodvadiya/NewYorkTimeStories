@@ -14,69 +14,73 @@ class StoryRepositoryImpl(private val apiService: ApiService, private val articl
     StoryRepository {
     override suspend fun getTopStories(section: String) = apiService.getTopStories(section)
 
-    override suspend fun getOrSearchRecordsFromSection(
+    override suspend fun searchRecordsFromSection(
         search: String,
         section: String
     ): Flow<Resource<List<Article>>> = flow {
-       // println("aaaaa 111 $section")
+        coroutineScope {
+            val dbResult= articleDao.searchRecordsFromSection(
+                searchQuery = search,
+                section = section
+            )
+            emit(Resource.Success(dbResult))
+        }
+    }
+        .distinctUntilChanged()
+
+
+    override suspend fun getRecordsFromSection(
+        section: String
+    ): Flow<Resource<List<Article>>> = flow {
+        // println("aaaaa 111 $section")
         emit(Resource.Loading<List<Article>>())
         coroutineScope {
             val dbResultDeferred = async {
-                articleDao.getOrSearchRecordsFromSection(
-                    searchQuery = search,
+                articleDao.getRecordsFromSection(
                     section = section
                 )
             }
 
-            if (search.isEmpty()) {
-                //println("aaaaaa 222")
-                val apiResultDeferred = async { apiService.getTopStories(section) }
+            //println("aaaaaa 222")
+            val apiResultDeferred = async { apiService.getTopStories(section) }
 
-                dbResultDeferred.await()
-               // println("aaaaaaa 3333")
-                apiResultDeferred.await()
+            dbResultDeferred.await()
+            // println("aaaaaaa 3333")
+            apiResultDeferred.await()
 
-                //println("aaaaaaa 44444")
-                val apiRes = apiResultDeferred.getCompleted()
-                val dbRes = dbResultDeferred.getCompleted()
+            //println("aaaaaaa 44444")
+            val apiRes = apiResultDeferred.getCompleted()
+            val dbRes = dbResultDeferred.getCompleted()
 
-                //println("aaaaaaa api = ${apiRes}")
-                //println("aaaaaaa database = ${dbRes}")
+            //println("aaaaaaa api = ${apiRes}")
+            //println("aaaaaaa database = ${dbRes}")
 
-                //if(dbRes.isNullOrEmpty()){
-                if (apiRes.isSuccessful) {
-                    //println("aaaaaaa 55555")
-                    if (apiRes.body() != null) {
-                        //println("aaaaaaa 666666 ${apiRes.body()?.results}")
-                        val deleterow = articleDao.deleteRecordsFromSection(section)
-                       // val deleterow = articleDao.deleteRecordsFromSection()
-                        //println("aaaaaa delete row = ${deleterow}")
-                        val insert = articleDao.insertAll(apiRes.body()!!.results.map { item -> item.copy(section = section) })
+            //if(dbRes.isNullOrEmpty()){
+            if (apiRes.isSuccessful) {
+                //println("aaaaaaa 55555")
+                if (apiRes.body() != null) {
+                    //println("aaaaaaa 666666 ${apiRes.body()?.results}")
+                    val deleterow = articleDao.deleteRecordsFromSection(section)
+                    // val deleterow = articleDao.deleteRecordsFromSection()
+                    //println("aaaaaa delete row = ${deleterow}")
+                    val insert = articleDao.insertAll(apiRes.body()!!.results.map { item -> item.copy(section = section) })
 
-                        //println("aaaaaa insert row = ${insert.size}")
+                    //println("aaaaaa insert row = ${insert.size}")
 
-                        emit(Resource.Success(apiRes.body()!!.results))
-                    } else {
-                        //println("aaaaaaa 777777")
-                        emit(Resource.Success(dbRes))
-                    }
-
-                } else if(dbRes.size >0) {
-                    //println("aaaaaaa 888888 $dbRes")
+                    emit(Resource.Success(apiRes.body()!!.results))
+                } else {
+                    //println("aaaaaaa 777777")
                     emit(Resource.Success(dbRes))
-                }else if(dbRes.size >0 ){
-                    //println("aaaaaaa 8888999 $dbRes")
-                    emit(Resource.Success(dbRes))
-                }else{
-                    emit(Resource.Error<List<Article>>(apiRes.message()))
                 }
 
-            } else {
-                dbResultDeferred.await()
-                //println("aaaaaaa 99999")
-                val dbRes = dbResultDeferred.getCompleted()
-                //println("aaaaaaa 00000000")
+            } else if(dbRes.size >0) {
+                //println("aaaaaaa 888888 $dbRes")
                 emit(Resource.Success(dbRes))
+            }else if(dbRes.size >0 ){
+                //println("aaaaaaa 8888999 $dbRes")
+                emit(Resource.Success(dbRes))
+            }else{
+                emit(Resource.Error<List<Article>>(apiRes.message()))
             }
 
 
