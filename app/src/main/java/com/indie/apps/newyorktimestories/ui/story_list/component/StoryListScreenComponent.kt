@@ -17,11 +17,14 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.outlined.ViewCozy
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -74,16 +77,16 @@ fun StoryListTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.onTertiary)
+            .background(MaterialTheme.colorScheme.primary)
             .height(50.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         val colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.onTertiary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.onTertiary,
-            disabledIndicatorColor = MaterialTheme.colorScheme.onTertiary,
-            focusedContainerColor = MaterialTheme.colorScheme.onTertiary,
-            unfocusedContainerColor = MaterialTheme.colorScheme.onTertiary
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            disabledIndicatorColor = MaterialTheme.colorScheme.primary,
+            focusedContainerColor = MaterialTheme.colorScheme.primary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primary
         )
 
         TextField(
@@ -94,9 +97,11 @@ fun StoryListTopBar(
             },
             placeholder = {
                 Text(
-                    text = "Search"
+                    text = "Search",
+                    color = MaterialTheme.colorScheme.background
                 )
             },
+            textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.background),
             modifier = Modifier
                 .weight(1f)
                 .background(MaterialTheme.colorScheme.onTertiary),
@@ -113,16 +118,23 @@ fun StoryListTopBar(
                 modifier = Modifier.width(120.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(imageVector = Icons.Default.FilterAlt, contentDescription = "list")
+                Icon(
+                    imageVector = Icons.Default.FilterAlt,
+                    contentDescription = "list",
+                    tint = MaterialTheme.colorScheme.background)
                 Text(
                     text = selectedFilterText,
                     modifier = Modifier
                         .width(70.dp)
                         .menuAnchor(),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.background
                 )
-                Icon(imageVector = if(expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown, contentDescription = "")
+                Icon(
+                    imageVector = if(expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.background)
             }
 
             ExposedDropdownMenu(
@@ -146,7 +158,8 @@ fun StoryListTopBar(
         IconButton(onClick = { enabledList = !enabledList}) {
             Icon(
                 imageVector = if (enabledList) Icons.AutoMirrored.Filled.List else Icons.Outlined.ViewCozy,
-                contentDescription = "list"
+                contentDescription = "list",
+                tint = MaterialTheme.colorScheme.background
             )
         }
 
@@ -159,48 +172,54 @@ fun StoryListItem(
     onItemSelect: ()-> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .drawBehind {
+    Card(
+        modifier = modifier,
+        onClick = onItemSelect
+    ) {
+        Row(
+            modifier = modifier/*
+                .drawBehind {
 
-                val strokeWidth = 1f
-                val y = size.height - strokeWidth / 2
+                    val strokeWidth = 1f
+                    val y = size.height - strokeWidth / 2
 
-                drawLine(
-                    Color.LightGray,
-                    Offset(0f, y),
-                    Offset(size.width, y),
-                    strokeWidth
+                    drawLine(
+                        Color.LightGray,
+                        Offset(0f, y),
+                        Offset(size.width, y),
+                        strokeWidth
+                    )
+                }
+                .clickable(role = Role.Button) {
+                    onItemSelect()
+                }*/
+                .padding(dimensionResource(id = R.dimen.inner_padding)),
+            verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = "image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.width(130.dp)
+            )
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = uiArticle.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = uiArticle.details,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color.Gray
                 )
             }
-            .clickable(role = Role.Button){
-                onItemSelect()
-            }
-            .padding(dimensionResource(id = R.dimen.inner_padding)),
-        verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "image",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.width(130.dp)
-        )
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = uiArticle.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(
-                text = uiArticle.details,
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.Gray
-            )
         }
     }
+
 }
 
 @Preview(showBackground = true)

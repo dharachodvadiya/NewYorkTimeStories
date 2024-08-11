@@ -47,8 +47,11 @@ class StoryListViewModel (
     }
 
     fun setSection(section : String){
-        currentSection.value = section.lowercase(Locale.ROOT)
-        getDataWithSection()
+        val searchtext = section.lowercase(Locale.ROOT)
+        if(currentSection.value != searchtext) {
+            currentSection.value = searchtext
+            getDataWithSection()
+        }
 
     }
 }

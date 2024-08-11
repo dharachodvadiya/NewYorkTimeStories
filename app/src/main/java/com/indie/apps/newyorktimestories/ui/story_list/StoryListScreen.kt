@@ -1,6 +1,8 @@
 package com.indie.apps.newyorktimestories.ui.story_list
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,7 +45,9 @@ fun StoryListScreen() {
     ) { innerPadding ->
 
         Column(
-            modifier = Modifier.padding(paddingValues = innerPadding)
+            modifier = Modifier
+                .padding(paddingValues = PaddingValues(top = innerPadding.calculateTopPadding()))
+
         ) {
 
             when (uiState) {
@@ -72,7 +77,10 @@ fun StoryListScreenData(
     onItemSelect: ()-> Unit,
     list: List<UIArticle>
 ) {
-    LazyColumn{
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.inner_padding)),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.inner_padding))
+    ){
         items(list) { article ->
             StoryListItem(
                 uiArticle = article,
