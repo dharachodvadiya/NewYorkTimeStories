@@ -212,7 +212,7 @@ fun StoryListItem(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = uiArticle.details,
+                    text = uiArticle.author,
                     style = MaterialTheme.typography.labelLarge,
                     color = Color.Gray
                 )

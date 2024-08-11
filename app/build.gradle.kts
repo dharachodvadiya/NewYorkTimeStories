@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -77,6 +78,19 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    //testImplementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
+    //testImplementation("androidx.room:room-paging:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    //testAnnotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    //kaptTest("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    //testImplementation("androidx.room:room-ktx:$roomVersion")
+
     implementation("androidx.compose.material:material-icons-extended:1.6.8")
 
     // Retrofit
@@ -91,4 +105,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
     implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("com.google.accompanist:accompanist-flowlayout:0.17.0")
+
+    //gson
+    implementation("com.google.code.gson:gson:2.8.7")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
 }

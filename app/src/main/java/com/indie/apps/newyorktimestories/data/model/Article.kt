@@ -1,27 +1,23 @@
 package com.indie.apps.newyorktimestories.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import com.indie.apps.newyorktimestories.ui.model.UIArticle
+import java.io.Serializable
 
+@Entity(tableName = "articles")
 data class Article(
-    val `abstract`: String,
-    val byline: String,
-    val created_date: String,
-    val des_facet: List<String>,
-    val geo_facet: List<String>,
-    val item_type: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int?,
+    @SerializedName("abstract")
+    val details: String,
     val kicker: String,
-    val material_type_facet: String,
     val multimedia: List<Multimedia>,
-    val org_facet: List<String>,
-    val per_facet: List<String>,
-    val published_date: String,
     val section: String,
-    val short_url: String,
-    val subsection: String,
     val title: String,
-    val updated_date: String,
     val uri: String,
     val url: String
 )
 
-fun Article.toUIArticle() = UIArticle(title, kicker, multimedia, abstract)
+fun Article.toUIArticle() = UIArticle(title, kicker, multimedia, details)

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.indie.apps.newyorktimestories.data.api.RetrofitInstance
+import com.indie.apps.newyorktimestories.data.db.DatabaseInstance
 import com.indie.apps.newyorktimestories.data.repository.StoryRepository
 import com.indie.apps.newyorktimestories.data.repository.StoryRepositoryImpl
 import com.indie.apps.newyorktimestories.usecase.GetStoriesFromSectionUseCase
@@ -33,7 +34,7 @@ class StoryListViewModel (
     val uiState = trigger
         .flatMapLatest {
             getStoriesFromSectionUseCase
-                .loadData(currentSection.value)
+                .loadData("",currentSection.value)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), Resource.Loading())
     init {
@@ -59,7 +60,7 @@ class StoryListViewModel (
 class StoryListViewModelFactory() : ViewModelProvider.Factory{
 
     override fun <T : ViewModel> create(modelClass: Class<T>) : T {
-        val storyRepo = StoryRepositoryImpl(RetrofitInstance.api)
+        val storyRepo = StoryRepositoryImpl(RetrofitInstance.api, DatabaseInstance.database.getArticleDao())
         return StoryListViewModel(GetStoriesFromSectionUseCase(storyRepo)) as T
     }
 }
