@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.indie.apps.newyorktimestories.R
 import com.indie.apps.newyorktimestories.ui.model.UIArticle
 import com.indie.apps.newyorktimestories.ui.theme.NewYorkTimeStoriesTheme
@@ -178,43 +179,33 @@ fun StoryListItem(
         onClick = onItemSelect
     ) {
         Row(
-            modifier = modifier/*
-                .drawBehind {
-
-                    val strokeWidth = 1f
-                    val y = size.height - strokeWidth / 2
-
-                    drawLine(
-                        Color.LightGray,
-                        Offset(0f, y),
-                        Offset(size.width, y),
-                        strokeWidth
-                    )
-                }
-                .clickable(role = Role.Button) {
-                    onItemSelect()
-                }*/
-                .padding(dimensionResource(id = R.dimen.inner_padding)),
+            modifier = modifier
+                ,
             verticalAlignment = Alignment.CenterVertically) {
+
+            val url = uiArticle.images?.get(2)?.url
+
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = rememberImagePainter(data = url),
                 contentDescription = "image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.width(130.dp)
+                contentScale = ContentScale.FillHeight,
+                modifier = Modifier
+                    .size(70.dp)
             )
 
             Column(
                 modifier = Modifier.weight(1f)
+                    .padding(dimensionResource(id = R.dimen.inner_padding))
             ) {
                 Text(
                     text = uiArticle.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = uiArticle.author,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.Gray
                 )
             }

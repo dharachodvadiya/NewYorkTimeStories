@@ -111,4 +111,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
+    // Glide
+    implementation("io.coil-kt:coil-compose:1.3.2")
+
 }
