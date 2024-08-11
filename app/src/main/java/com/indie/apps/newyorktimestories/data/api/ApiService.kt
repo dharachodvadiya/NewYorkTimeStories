@@ -9,8 +9,9 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("v2/arts.json")
+    @GET("v2/{section}.json")
     suspend fun getTopStories(
+        @Path("section") section: String,
         @Query("api-key") apiKey: String = Constant.API_KEY
     ): Response<ApiResponse>
 }

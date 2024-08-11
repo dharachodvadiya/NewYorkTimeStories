@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">NewYorkTimeStories</string>
+    <string name="loading">Loading...</string>
 
     <string-array name="section">
         <item>Home</item>
@@ -8,9 +9,9 @@
         <item>Business</item>
         <item>Fashion</item>
         <item>Food</item>
-        <item>Health</item>
+        <!--<item>Health</item>-->
         <item>Insider</item>
-        <item>Magazine</item>
+        <!--<item>Magazine</item>-->
         <item>Movies</item>
         <item>Nyregion</item>
         <item>Obituaries</item>

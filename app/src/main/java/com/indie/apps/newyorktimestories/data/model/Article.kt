@@ -1,5 +1,7 @@
 package com.indie.apps.newyorktimestories.data.model
 
+import com.indie.apps.newyorktimestories.ui.model.UIArticle
+
 data class Article(
     val `abstract`: String,
     val byline: String,
@@ -21,3 +23,5 @@ data class Article(
     val uri: String,
     val url: String
 )
+
+fun Article.toUIArticle() = UIArticle(title, kicker, multimedia, abstract)

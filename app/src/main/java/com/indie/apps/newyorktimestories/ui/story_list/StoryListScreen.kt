@@ -12,9 +12,12 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.indie.apps.newyorktimestories.R
-import com.indie.apps.newyorktimestories.data.model.Article
+import com.indie.apps.newyorktimestories.ui.common.ErrorScreen
+import com.indie.apps.newyorktimestories.ui.common.LoadingScreen
+import com.indie.apps.newyorktimestories.ui.model.UIArticle
 import com.indie.apps.newyorktimestories.ui.story_list.component.StoryListItem
 import com.indie.apps.newyorktimestories.ui.story_list.component.StoryListTopBar
+import com.indie.apps.newyorktimestories.util.ErrorMessage
 import com.indie.apps.newyorktimestories.util.Resource
 
 @Composable
@@ -24,42 +27,57 @@ fun StoryListScreen() {
     )
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val currentFilterText by viewModel.currentSection.collectAsStateWithLifecycle()
+    val filterList = stringArrayResource(id = R.array.section).toList()
 
-    when (uiState) {
-        is Resource.Loading -> {}
-        is Resource.Error -> {}
-        is Resource.Success -> {
-            uiState.data?.let {
-                StoryListScreenData(
-                    list = it
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun StoryListScreenData(
-    list: List<Article>,
-    modifier: Modifier = Modifier
-) {
     Scaffold(
         topBar = {
             StoryListTopBar(
                 onTextChange = {},
-                options = stringArrayResource(id = R.array.section).toList()
+                options = filterList,
+                onFilterSelect = viewModel::setSection,
+                selectedFilterText =currentFilterText
             )
         }
     ) { innerPadding ->
 
         Column(
-            modifier = modifier.padding(paddingValues = innerPadding)
+            modifier = Modifier.padding(paddingValues = innerPadding)
         ) {
-            LazyColumn{
-                items(list) { movie ->
-                    StoryListItem()
+
+            when (uiState) {
+                is Resource.Loading -> {LoadingScreen()}
+                is Resource.Error -> {ErrorScreen(uiState.message)}
+                is Resource.Success -> {
+                    if(uiState.data.isNullOrEmpty())
+                    {
+                        ErrorScreen(ErrorMessage.N0_DATA_FOUND.message)
+                    }else{
+                        StoryListScreenData(
+                            list = uiState.data!!,
+                            onItemSelect = {},
+                        )
+                    }
                 }
             }
+        }
+    }
+
+
+
+}
+
+@Composable
+fun StoryListScreenData(
+    onItemSelect: ()-> Unit,
+    list: List<UIArticle>
+) {
+    LazyColumn{
+        items(list) { article ->
+            StoryListItem(
+                uiArticle = article,
+                onItemSelect = onItemSelect
+            )
         }
     }
 }

@@ -2,6 +2,7 @@ package com.indie.apps.newyorktimestories.ui.story_list.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,24 +39,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.indie.apps.newyorktimestories.R
+import com.indie.apps.newyorktimestories.ui.model.UIArticle
 import com.indie.apps.newyorktimestories.ui.theme.NewYorkTimeStoriesTheme
+import org.intellij.lang.annotations.JdkConstants.FontStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoryListTopBar(
     onTextChange: (String) -> Unit,
     //enabledList: Boolean = true,
+    selectedFilterText: String,
+    onFilterSelect: (String) -> Unit,
     options: List<String>,
     modifier: Modifier = Modifier
 ) {
     //val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
     var expanded by remember { mutableStateOf(false) }
     var enabledList by remember { mutableStateOf(true) }
-    var selectedText by remember { mutableStateOf(options[0]) }
+   /* var selectedFilterText by remember {
+        mutableStateOf(options[0])
+    }*/
 
     var textState by remember {
         mutableStateOf("")
@@ -65,15 +74,16 @@ fun StoryListTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.onTertiary)
             .height(50.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         val colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = MaterialTheme.colorScheme.background,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
-            disabledIndicatorColor = MaterialTheme.colorScheme.background,
-            focusedContainerColor = MaterialTheme.colorScheme.background,
-            unfocusedContainerColor = MaterialTheme.colorScheme.background
+            focusedIndicatorColor = MaterialTheme.colorScheme.onTertiary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.onTertiary,
+            disabledIndicatorColor = MaterialTheme.colorScheme.onTertiary,
+            focusedContainerColor = MaterialTheme.colorScheme.onTertiary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.onTertiary
         )
 
         TextField(
@@ -89,7 +99,7 @@ fun StoryListTopBar(
             },
             modifier = Modifier
                 .weight(1f)
-                .background(MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.onTertiary),
             colors = colors
         )
 
@@ -105,7 +115,7 @@ fun StoryListTopBar(
             ) {
                 Icon(imageVector = Icons.Default.FilterAlt, contentDescription = "list")
                 Text(
-                    text = selectedText,
+                    text = selectedFilterText,
                     modifier = Modifier
                         .width(70.dp)
                         .menuAnchor(),
@@ -124,8 +134,9 @@ fun StoryListTopBar(
                     DropdownMenuItem(
                         text = { Text(text = item) },
                         onClick = {
-                            selectedText = item
+                            //selectedFilterText = item
                             expanded = false
+                            onFilterSelect(item)
                         }
                     )
                 }
@@ -144,6 +155,8 @@ fun StoryListTopBar(
 
 @Composable
 fun StoryListItem(
+    uiArticle: UIArticle,
+    onItemSelect: ()-> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -160,26 +173,31 @@ fun StoryListItem(
                     strokeWidth
                 )
             }
+            .clickable(role = Role.Button){
+                onItemSelect()
+            }
             .padding(dimensionResource(id = R.dimen.inner_padding)),
         verticalAlignment = Alignment.CenterVertically) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "icon",
+            contentDescription = "image",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(70.dp)
+            modifier = Modifier.width(130.dp)
         )
 
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Title",
-                style = MaterialTheme.typography.titleMedium
+                text = uiArticle.title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = "description",
-                style = MaterialTheme.typography.labelLarge
+                text = uiArticle.details,
+                style = MaterialTheme.typography.labelLarge,
+                color = Color.Gray
             )
         }
     }
@@ -189,10 +207,10 @@ fun StoryListItem(
 @Composable
 fun StoryListTopBarPriview() {
     NewYorkTimeStoriesTheme {
-        StoryListTopBar(
+       /* StoryListTopBar(
             onTextChange = {},
             options = emptyList()
-        )
+        )*/
     }
 }
 
@@ -200,6 +218,6 @@ fun StoryListTopBarPriview() {
 @Composable
 fun StoryListItemPriview() {
     NewYorkTimeStoriesTheme {
-        StoryListItem()
+        //StoryListItem({})
     }
 }
