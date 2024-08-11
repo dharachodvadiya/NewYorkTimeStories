@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">NewYorkTimeStories</string>
+
+    <string-array name="section">
+        <item>Home</item>
+        <item>Arts</item>
+        <item>Automobiles</item>
+        <item>Business</item>
+        <item>Fashion</item>
+        <item>Food</item>
+        <item>Health</item>
+        <item>Insider</item>
+        <item>Magazine</item>
+        <item>Movies</item>
+        <item>Nyregion</item>
+        <item>Obituaries</item>
+        <item>Opinion</item>
+        <item>Politics</item>
+        <item>Realestate</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Sundayreview</item>
+        <item>Technology</item>
+        <item>Theater</item>
+        <item>Travel</item>
+        <item>Upshot</item>
+        <item>Us</item>
+        <item>World</item>
+    </string-array>
+
 </resources>

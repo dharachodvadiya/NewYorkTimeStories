@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding">15dp</dimen>
+    <dimen name="inner_padding">7dp</dimen>
+    <dimen name="round_corner">7dp</dimen>
+</resources>

@@ -26,7 +26,7 @@ class GetStoriesFromSectionUseCase(
             } catch(t: Throwable) {
                 when(t) {
                     is IOException -> emit(Resource.Error("Network Failure"))
-                    else -> emit(Resource.Error("Conversion Error"))
+                    else -> emit(Resource.Error("Api Request Error"))
                 }
             }
         }.flowOn(dispatcher)
