@@ -134,4 +134,6 @@ class StoryRepositoryImpl(private val apiService: ApiService, private val articl
         }
     }
         .distinctUntilChanged()
+
+    override suspend fun getRecordsFromId(id: Long) = articleDao.getRecordsFromId(id)
 }

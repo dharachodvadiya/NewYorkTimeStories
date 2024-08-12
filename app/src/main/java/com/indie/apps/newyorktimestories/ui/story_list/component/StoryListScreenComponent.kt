@@ -176,7 +176,12 @@ fun StoryListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            val url = uiArticle.images?.get(2)?.url
+            val url = if(uiArticle.images?.size ?: 0 ==3)
+            {
+                uiArticle.images?.get(2)?.url
+            }else{
+                ""
+            }
 
             Image(
                 painter = rememberImagePainter(data = url),
@@ -228,8 +233,12 @@ fun StoryCardListItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val url = uiArticle.images?.get(1)?.url
-
+            val url = if(uiArticle.images?.size ?: 0 ==3)
+            {
+                uiArticle.images?.get(1)?.url
+            }else{
+                ""
+            }
             Image(
                 painter = rememberImagePainter(data = url),
                 contentDescription = "image",

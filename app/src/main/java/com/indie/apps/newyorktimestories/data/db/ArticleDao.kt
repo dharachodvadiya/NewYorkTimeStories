@@ -22,6 +22,10 @@ interface  ArticleDao {
     suspend fun getRecordsFromSection(section: String): List<Article>
 
     @Transaction
+    @Query("SELECT * FROM articles WHERE id = :id")
+    suspend fun getRecordsFromId(id: Long): Article
+
+    @Transaction
     @Query("SELECT * FROM articles WHERE section = :section AND (title LIKE  '%' || :searchQuery || '%' OR kicker LIKE  '%' || :searchQuery || '%')")
     suspend fun searchRecordsFromSection(searchQuery: String, section: String): List<Article>
 

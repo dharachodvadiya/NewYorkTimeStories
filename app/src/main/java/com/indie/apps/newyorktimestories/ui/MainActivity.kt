@@ -19,6 +19,7 @@ import com.indie.apps.newyorktimestories.ui.story_detail.StoryDetailScreen
 import com.indie.apps.newyorktimestories.ui.story_list.StoryListScreen
 import com.indie.apps.newyorktimestories.ui.story_list.StoryListViewModel
 import com.indie.apps.newyorktimestories.ui.theme.NewYorkTimeStoriesTheme
+import com.indie.apps.newyorktimestories.util.Constant
 
 class MainActivity : ComponentActivity() {
 
@@ -39,12 +40,20 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Screen.StoryListScreen.route
                         ) {
-                            StoryListScreen()
+                            StoryListScreen(
+                                onItemClick = {
+                                    navController.navigate(Screen.StoryDetailScreen.route + "/${it}")
+                                }
+                            )
                         }
                         composable(
-                            route = Screen.StoryDetailScreen.route + "/{Id}",
+                            route = Screen.StoryDetailScreen.route + "/{${Constant.PARAM_ARTICLE_ID}}",
                         ) {
-                            StoryDetailScreen()
+                            StoryDetailScreen(
+                                onNavigationBack = {
+                                    navController.navigateUp()
+                                }
+                            )
                         }
                     }
                 }

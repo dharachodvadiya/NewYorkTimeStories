@@ -30,7 +30,9 @@ import com.indie.apps.newyorktimestories.util.ErrorMessage
 import com.indie.apps.newyorktimestories.util.Resource
 
 @Composable
-fun StoryListScreen() {
+fun StoryListScreen(
+    onItemClick : (Long) -> Unit,
+) {
     var viewModel: StoryListViewModel = viewModel(
         factory = StoryListViewModelFactory()
     )
@@ -80,12 +82,12 @@ fun StoryListScreen() {
                         if (enabledList) {
                             StoryListScreenData(
                                 list = uiState.data!!,
-                                onItemSelect = {},
+                                onItemSelect = onItemClick,
                             )
                         } else {
                             StoryCardListScreenData(
                                 list = uiState.data!!,
-                                onItemSelect = {},
+                                onItemSelect = onItemClick,
                             )
                         }
 
@@ -100,7 +102,7 @@ fun StoryListScreen() {
 
 @Composable
 fun StoryListScreenData(
-    onItemSelect: () -> Unit,
+    onItemSelect: (Long) -> Unit,
     list: List<UIArticle>
 ) {
     LazyColumn(
@@ -112,7 +114,7 @@ fun StoryListScreenData(
             key = {item -> item.id}) { article ->
             StoryListItem(
                 uiArticle = article,
-                onItemSelect = onItemSelect
+                onItemSelect = {onItemSelect(article.id)}
             )
         }
     }
@@ -120,7 +122,7 @@ fun StoryListScreenData(
 
 @Composable
 fun StoryCardListScreenData(
-    onItemSelect: () -> Unit,
+    onItemSelect: (Long) -> Unit,
     list: List<UIArticle>
 ) {
     LazyVerticalGrid(
@@ -134,8 +136,9 @@ fun StoryCardListScreenData(
             key = {index -> list[index].id}) { index ->
             StoryCardListItem(
                 uiArticle = list[index],
-                onItemSelect = onItemSelect
-            )
+                onItemSelect = {
+                    onItemSelect(list[index].id)
+                })
         }
     }
 }

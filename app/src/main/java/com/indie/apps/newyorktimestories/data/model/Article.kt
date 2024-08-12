@@ -13,7 +13,7 @@ data class Article(
     @SerializedName("abstract")
     val details: String,
     val kicker: String,
-    val multimedia: List<Multimedia>,
+    val multimedia: List<Multimedia>?,
     val section: String,
     val title: String,
     val uri: String,

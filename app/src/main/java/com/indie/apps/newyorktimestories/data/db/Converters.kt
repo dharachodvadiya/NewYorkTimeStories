@@ -8,7 +8,7 @@ import java.util.Collections
 
 class Converters {
     @TypeConverter
-    fun stringToListMultimedia(data: String): List<Multimedia> {
+    fun stringToListMultimedia(data: String?): List<Multimedia> {
         if (data == null) {
             return Collections.emptyList()
         }
@@ -18,7 +18,10 @@ class Converters {
     }
 
     @TypeConverter
-    fun listMultimediaToString(someObjects: List<Multimedia>): String {
-        return Gson().toJson(someObjects)
+    fun listMultimediaToString(someObjects: List<Multimedia>?): String? {
+        if(someObjects.isNullOrEmpty())
+            return null
+        else
+            return Gson().toJson(someObjects)
     }
 }

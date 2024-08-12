@@ -12,4 +12,5 @@ interface StoryRepository {
     suspend fun searchRecordsFromSection(search:String,section: String): Flow<Resource<List<Article>>>
 
     suspend fun getRecordsFromSection(section: String): Flow<Resource<List<Article>>>
+    suspend fun getRecordsFromId(id : Long): Article
 }

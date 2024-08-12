@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NewYorkTimeStories</string>
     <string name="loading">Loading...</string>
+    <string name="article">Article</string>
 
     <string-array name="section">
         <item>Home</item>
