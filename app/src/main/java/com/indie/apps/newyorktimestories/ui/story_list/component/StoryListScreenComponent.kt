@@ -2,6 +2,7 @@ package com.indie.apps.newyorktimestories.ui.story_list.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.outlined.ViewCozy
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -271,6 +273,32 @@ fun StoryCardListItem(
         }
     }
 
+}
+
+@Composable
+fun RecentlyViewedItem(
+    title: String,
+    modifier: Modifier = Modifier
+){
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .background(Color.LightGray)
+            .padding(dimensionResource(id = R.dimen.inner_padding)),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Recently Viewed Article",
+            style = MaterialTheme.typography.labelMedium,
+            color = Color.Gray
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }
 
 @Preview(showBackground = true)

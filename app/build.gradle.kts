@@ -115,4 +115,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:1.3.2")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha01")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

@@ -15,17 +15,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.indie.apps.newyorktimestories.R
+import com.indie.apps.newyorktimestories.data.PreferencesManager
 import com.indie.apps.newyorktimestories.ui.common.ErrorScreen
 import com.indie.apps.newyorktimestories.ui.common.LoadingScreen
 import com.indie.apps.newyorktimestories.ui.model.UIArticle
+import com.indie.apps.newyorktimestories.ui.story_list.component.RecentlyViewedItem
 import com.indie.apps.newyorktimestories.ui.story_list.component.StoryCardListItem
 import com.indie.apps.newyorktimestories.ui.story_list.component.StoryListItem
 import com.indie.apps.newyorktimestories.ui.story_list.component.StoryListTopBar
+import com.indie.apps.newyorktimestories.util.Constant
 import com.indie.apps.newyorktimestories.util.ErrorMessage
 import com.indie.apps.newyorktimestories.util.Resource
 
@@ -33,6 +37,12 @@ import com.indie.apps.newyorktimestories.util.Resource
 fun StoryListScreen(
     onItemClick : (Long) -> Unit,
 ) {
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+
+    val prefTitle by remember { mutableStateOf(preferencesManager.getData(Constant.PREF_ARTICLE_TITLE, "")) }
+
+
     var viewModel: StoryListViewModel = viewModel(
         factory = StoryListViewModelFactory()
     )
@@ -68,11 +78,11 @@ fun StoryListScreen(
 
             when (uiState) {
                 is Resource.Loading -> {
-                    LoadingScreen()
+                    LoadingScreen(modifier = Modifier.weight(1f))
                 }
 
                 is Resource.Error -> {
-                    ErrorScreen(uiState.message)
+                    ErrorScreen(uiState.message, modifier = Modifier.weight(1f))
                 }
 
                 is Resource.Success -> {
@@ -83,17 +93,26 @@ fun StoryListScreen(
                             StoryListScreenData(
                                 list = uiState.data!!,
                                 onItemSelect = onItemClick,
+                                modifier = Modifier.weight(1f)
                             )
                         } else {
                             StoryCardListScreenData(
                                 list = uiState.data!!,
                                 onItemSelect = onItemClick,
+                                modifier = Modifier.weight(1f)
                             )
                         }
 
                     }
                 }
             }
+            if(prefTitle.isNotEmpty())
+            {
+                RecentlyViewedItem(
+                    title = prefTitle
+                )
+            }
+
         }
     }
 
@@ -103,9 +122,11 @@ fun StoryListScreen(
 @Composable
 fun StoryListScreenData(
     onItemSelect: (Long) -> Unit,
-    list: List<UIArticle>
+    list: List<UIArticle>,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.inner_padding)),
         contentPadding = PaddingValues(dimensionResource(id = R.dimen.inner_padding))
     ) {
@@ -123,9 +144,11 @@ fun StoryListScreenData(
 @Composable
 fun StoryCardListScreenData(
     onItemSelect: (Long) -> Unit,
-    list: List<UIArticle>
+    list: List<UIArticle>,
+    modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
+        modifier = modifier,
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.inner_padding)),
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.inner_padding)),

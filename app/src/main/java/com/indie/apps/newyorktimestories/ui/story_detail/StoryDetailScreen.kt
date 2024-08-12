@@ -6,15 +6,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.indie.apps.newyorktimestories.R
+import com.indie.apps.newyorktimestories.data.PreferencesManager
 import com.indie.apps.newyorktimestories.ui.common.ErrorScreen
 import com.indie.apps.newyorktimestories.ui.common.LoadingScreen
 import com.indie.apps.newyorktimestories.ui.story_detail.component.StoryDetailData
 import com.indie.apps.newyorktimestories.ui.story_detail.component.StoryDetailTopBar
+import com.indie.apps.newyorktimestories.util.Constant
 import com.indie.apps.newyorktimestories.util.ErrorMessage
 import com.indie.apps.newyorktimestories.util.Resource
 
@@ -23,6 +27,8 @@ fun StoryDetailScreen(
     onSeeMoreClick: (Long) -> Unit,
     onNavigationBack: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
 
     var viewModel: StoryDetailViewModel = viewModel(
         factory = StoryDetailViewModelFactory()
@@ -55,6 +61,9 @@ fun StoryDetailScreen(
 
                 is Resource.Success -> {
                     if (uiState.data != null) {
+
+                        preferencesManager.saveData(Constant.PREF_ARTICLE_TITLE, uiState.data!!.title)
+
                         StoryDetailData(
                             uiArticle = uiState.data!!,
                             onSeeMoreClick = onSeeMoreClick)
