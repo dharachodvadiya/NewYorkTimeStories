@@ -2,10 +2,10 @@ package com.indie.apps.newyorktimestories.ui.story_list.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.outlined.ViewCozy
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -36,14 +35,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,24 +47,19 @@ import coil.compose.rememberImagePainter
 import com.indie.apps.newyorktimestories.R
 import com.indie.apps.newyorktimestories.ui.model.UIArticle
 import com.indie.apps.newyorktimestories.ui.theme.NewYorkTimeStoriesTheme
-import org.intellij.lang.annotations.JdkConstants.FontStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoryListTopBar(
     onTextChange: (String) -> Unit,
-    //enabledList: Boolean = true,
+    enabledList: Boolean = true,
     selectedFilterText: String,
     onFilterSelect: (String) -> Unit,
+    onListChange: () -> Unit,
     options: List<String>,
     modifier: Modifier = Modifier
 ) {
-    //val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
     var expanded by remember { mutableStateOf(false) }
-    var enabledList by remember { mutableStateOf(true) }
-   /* var selectedFilterText by remember {
-        mutableStateOf(options[0])
-    }*/
 
     var textState by remember {
         mutableStateOf("")
@@ -122,7 +113,8 @@ fun StoryListTopBar(
                 Icon(
                     imageVector = Icons.Default.FilterAlt,
                     contentDescription = "list",
-                    tint = MaterialTheme.colorScheme.background)
+                    tint = MaterialTheme.colorScheme.background
+                )
                 Text(
                     text = selectedFilterText,
                     modifier = Modifier
@@ -133,9 +125,10 @@ fun StoryListTopBar(
                     color = MaterialTheme.colorScheme.background
                 )
                 Icon(
-                    imageVector = if(expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                    imageVector = if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
                     contentDescription = "",
-                    tint = MaterialTheme.colorScheme.background)
+                    tint = MaterialTheme.colorScheme.background
+                )
             }
 
             ExposedDropdownMenu(
@@ -157,7 +150,7 @@ fun StoryListTopBar(
             }
         }
 
-        IconButton(onClick = { enabledList = !enabledList}) {
+        IconButton(onClick = onListChange) {
             Icon(
                 imageVector = if (enabledList) Icons.AutoMirrored.Filled.List else Icons.Outlined.ViewCozy,
                 contentDescription = "list",
@@ -171,7 +164,7 @@ fun StoryListTopBar(
 @Composable
 fun StoryListItem(
     uiArticle: UIArticle,
-    onItemSelect: ()-> Unit,
+    onItemSelect: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -179,36 +172,93 @@ fun StoryListItem(
         onClick = onItemSelect
     ) {
         Row(
-            modifier = modifier
-                ,
-            verticalAlignment = Alignment.CenterVertically) {
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
             val url = uiArticle.images?.get(2)?.url
 
             Image(
                 painter = rememberImagePainter(data = url),
                 contentDescription = "image",
-                contentScale = ContentScale.FillHeight,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(70.dp)
+                    .size(100.dp)
+                    .fillMaxHeight()
             )
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .height(100.dp)
                     .padding(dimensionResource(id = R.dimen.inner_padding))
             ) {
                 Text(
                     text = uiArticle.title,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = uiArticle.author,
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    textAlign = TextAlign.Right,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
+        }
+    }
+
+}
+
+@Composable
+fun StoryCardListItem(
+    uiArticle: UIArticle,
+    onItemSelect: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .height(200.dp),
+        onClick = onItemSelect
+    ) {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            val url = uiArticle.images?.get(2)?.url
+
+            Image(
+                painter = rememberImagePainter(data = url),
+                contentDescription = "image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth()
+            )
+
+            Column(
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.inner_padding))
+            ) {
+                Text(
+                    text = uiArticle.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = uiArticle.author,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Right,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+
         }
     }
 
@@ -218,10 +268,10 @@ fun StoryListItem(
 @Composable
 fun StoryListTopBarPriview() {
     NewYorkTimeStoriesTheme {
-       /* StoryListTopBar(
-            onTextChange = {},
-            options = emptyList()
-        )*/
+        /* StoryListTopBar(
+             onTextChange = {},
+             options = emptyList()
+         )*/
     }
 }
 
