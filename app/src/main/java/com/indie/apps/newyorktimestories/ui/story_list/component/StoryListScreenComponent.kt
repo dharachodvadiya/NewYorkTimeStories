@@ -228,7 +228,7 @@ fun StoryCardListItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val url = uiArticle.images?.get(2)?.url
+            val url = uiArticle.images?.get(1)?.url
 
             Image(
                 painter = rememberImagePainter(data = url),

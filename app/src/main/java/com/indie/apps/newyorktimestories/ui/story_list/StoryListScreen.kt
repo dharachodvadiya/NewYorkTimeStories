@@ -107,7 +107,9 @@ fun StoryListScreenData(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.inner_padding)),
         contentPadding = PaddingValues(dimensionResource(id = R.dimen.inner_padding))
     ) {
-        items(list) { article ->
+        items(
+            items = list,
+            key = {item -> item.id}) { article ->
             StoryListItem(
                 uiArticle = article,
                 onItemSelect = onItemSelect
@@ -127,7 +129,9 @@ fun StoryCardListScreenData(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.inner_padding)),
         contentPadding = PaddingValues(dimensionResource(id = R.dimen.inner_padding))
     ) {
-        items(list.size) { index ->
+        items(
+            count = list.size,
+            key = {index -> list[index].id}) { index ->
             StoryCardListItem(
                 uiArticle = list[index],
                 onItemSelect = onItemSelect

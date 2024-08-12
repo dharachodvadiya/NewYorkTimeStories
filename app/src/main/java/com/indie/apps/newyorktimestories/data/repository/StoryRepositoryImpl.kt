@@ -19,7 +19,7 @@ class StoryRepositoryImpl(private val apiService: ApiService, private val articl
         section: String
     ): Flow<Resource<List<Article>>> = flow {
         coroutineScope {
-            val dbResult= articleDao.searchRecordsFromSection(
+            val dbResult = articleDao.searchRecordsFromSection(
                 searchQuery = search,
                 section = section
             )
@@ -29,7 +29,7 @@ class StoryRepositoryImpl(private val apiService: ApiService, private val articl
         .distinctUntilChanged()
 
 
-    override suspend fun getRecordsFromSection(
+    /*override suspend fun getRecordsFromSection(
         section: String
     ): Flow<Resource<List<Article>>> = flow {
         // println("aaaaa 111 $section")
@@ -83,6 +83,53 @@ class StoryRepositoryImpl(private val apiService: ApiService, private val articl
                 emit(Resource.Error<List<Article>>(apiRes.message()))
             }
 
+
+        }
+    }
+        .distinctUntilChanged()*/
+
+    override suspend fun getRecordsFromSection(
+        section: String
+    ): Flow<Resource<List<Article>>> = flow {
+        emit(Resource.Loading<List<Article>>())
+        coroutineScope {
+
+
+            val apiResultDeferred = async { apiService.getTopStories(section) }
+
+
+            apiResultDeferred.await()
+
+            val apiRes = apiResultDeferred.getCompleted()
+
+
+
+            if (apiRes.isSuccessful) {
+                if (apiRes.body() != null) {
+                    val deleterow = articleDao.deleteRecordsFromSection(section)
+                    val insert =
+                        articleDao.insertAll(apiRes.body()!!.results.map { item -> item.copy(section = section) })
+
+                    //emit(Resource.Success(apiRes.body()!!.results))
+                }
+
+            }
+
+            val dbResultDeferred = async {
+                articleDao.getRecordsFromSection(
+                    section = section
+                )
+            }
+
+            dbResultDeferred.await()
+
+            val dbRes = dbResultDeferred.getCompleted()
+
+            if (dbRes.isNotEmpty()) {
+                emit(Resource.Success(dbRes))
+            } else {
+                emit(Resource.Error<List<Article>>(apiRes.message()))
+            }
 
         }
     }
