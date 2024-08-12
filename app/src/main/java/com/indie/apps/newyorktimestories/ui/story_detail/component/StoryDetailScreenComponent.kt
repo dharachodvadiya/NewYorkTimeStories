@@ -2,6 +2,7 @@ package com.indie.apps.newyorktimestories.ui.story_detail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,6 +76,7 @@ fun StoryDetailTopBar(
 @Composable
 fun StoryDetailData(
     uiArticle: UIArticle,
+    onSeeMoreClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val url = uiArticle.images?.get(0)?.url
@@ -113,7 +116,9 @@ fun StoryDetailData(
             style = MaterialTheme.typography.labelMedium,
             color = Color.Blue,
             textAlign = TextAlign.Right,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .clickable(role = Role.Button) { onSeeMoreClick(uiArticle.id)  }
+                .fillMaxWidth()
         )
     }
 

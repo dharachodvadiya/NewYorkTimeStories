@@ -20,4 +20,4 @@ data class Article(
     val url: String
 )
 
-fun Article.toUIArticle() = UIArticle(id?: 0,title, kicker, multimedia, details)
+fun Article.toUIArticle() = UIArticle(id?: 0,title, kicker, multimedia, details, url)

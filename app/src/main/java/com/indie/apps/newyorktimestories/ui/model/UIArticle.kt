@@ -8,4 +8,5 @@ data class UIArticle(
     val author: String,
     val images: List<Multimedia>?,
     val details: String,
+    val url: String
 )
