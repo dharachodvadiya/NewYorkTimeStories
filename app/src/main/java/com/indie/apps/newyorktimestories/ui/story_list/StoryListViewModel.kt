@@ -26,10 +26,6 @@ class StoryListViewModel (
     private val searchStoriesFromSectionUseCase : SearchStoriesFromSectionUseCase,
 ) : ViewModel() {
 
-    /*val uiState = getStoriesFromSectionUseCase
-        .loadData("home")
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), Resource.Loading())*/
-
     val currentSection = MutableStateFlow("home")
     private var searchQuery = ""
     private var isSearch  = false
@@ -53,7 +49,7 @@ class StoryListViewModel (
         getDataWithSection()
     }
 
-    private fun getDataWithSection() {
+    fun getDataWithSection() {
         viewModelScope.launch {
             trigger.emit(Unit)
         }

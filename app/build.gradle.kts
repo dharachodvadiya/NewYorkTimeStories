@@ -81,15 +81,10 @@ dependencies {
     //Room
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
-    //testImplementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-paging:$roomVersion")
-    //testImplementation("androidx.room:room-paging:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    //testAnnotationProcessor("androidx.room:room-compiler:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
-    //kaptTest("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    //testImplementation("androidx.room:room-ktx:$roomVersion")
 
     implementation("androidx.compose.material:material-icons-extended:1.6.8")
 
@@ -110,6 +105,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.7")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
 
     // Glide
     implementation("io.coil-kt:coil-compose:1.3.2")
@@ -117,4 +113,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha01")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    testImplementation("android.arch.core:core-testing:1.1.1")
+    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.mockito:mockito-inline:2.13.0")
 }
