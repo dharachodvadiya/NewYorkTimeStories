@@ -6,6 +6,14 @@ This Android app displays a list of New York Times Top Stories, featuring both a
 
 The app implements an offline-first approach using Room Database for local storage, ensuring that users can still access previously viewed stories even without an internet connection.
 
+## Preview
+
+<img src="https://github.com/user-attachments/assets/89c71afe-fb8c-4451-a2f8-37180a6b338f" width="189" height="420">
+<img src="https://github.com/user-attachments/assets/dae1c757-df7c-4e0e-acd3-21205a4db815" width="189" height="420">
+<img src="https://github.com/user-attachments/assets/c97c3806-fc5c-45a8-992d-acf4783e1a43" width="189" height="420">
+<img src="https://github.com/user-attachments/assets/0272b7f5-564f-431e-896a-e5ddc096b940" width="189" height="420">
+<img src="https://github.com/user-attachments/assets/1f18f545-648b-46db-b474-84f6dc3ac0b1" width="189" height="420">
+
 ## Features
 
 - **Search**: Find news by title or author name.
