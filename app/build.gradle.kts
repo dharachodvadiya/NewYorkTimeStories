@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.indie.apps.newyorktimestories"
+    namespace = "com.allvideo.status.free.downloade"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.indie.apps.newyorktimestories"
+        applicationId = "com.allvideo.status.free.downloade"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
